@@ -45,12 +45,12 @@ body{position:relative;overflow:hidden;background:var(--bg);color:var(--tx);font
 <script>
 const {Vector3:V3,Quaternion:Q}=THREE,$=i=>document.getElementById(i);
 const H=1.2,SR=.3,SH=.2,G=40;
-const COLORS=['#E07A38','#5C8374','#F4A261','#8D6E63','#F5EFE6'];
+const COLORS=['#E07A38','#5C8374','#F4A261','#8D6E63','#332E2A'];
 const SHAPES={sq:{n:'2x2 正方',w:2,d:2},long:{n:'2x4 長方',w:2,d:4},arc:{n:'2x2 弧形磚',w:2,d:2}};
 let color=COLORS[0],shape='long',mode='place',rot=0,multi=false,gc=0,lastE=null,tm,free=true;
 const cv=$('c'),R=new THREE.WebGLRenderer({canvas:cv,antialias:true});R.setPixelRatio(Math.min(devicePixelRatio,2));
 const S=new THREE.Scene(),cam=new THREE.PerspectiveCamera(45,1,.1,500),ray=new THREE.Raycaster();
-S.add(new THREE.HemisphereLight(0xfffcf5,0x8d8278,.95));
+S.add(new THREE.HemisphereLight(0xfffcf5,0x665c52,.95));
 const dl=new THREE.DirectionalLight(0xfff6e8,.75);dl.position.set(8,16,10);S.add(dl);
 function theme(){S.background=new THREE.Color(getComputedStyle(document.body).backgroundColor)}
 theme();matchMedia('(prefers-color-scheme: dark)').addEventListener('change',theme);
@@ -60,7 +60,9 @@ const stG=new THREE.CylinderGeometry(SR,SR,SH,18),boxG={};
 const arcG=(()=>{const h=H/2,s=new THREE.Shape();
  s.moveTo(-1,-h);s.lineTo(1,-h);s.lineTo(1,-h+.3);s.quadraticCurveTo(.45,h,0,h);s.lineTo(-1,h);s.lineTo(-1,-h);
  const g=new THREE.ExtrudeGeometry(s,{depth:2,bevelEnabled:false,curveSegments:12});g.rotateY(-Math.PI/2);g.translate(1,0,0);return g})();
-const base=new THREE.Mesh(new THREE.BoxGeometry(G,.4,G),new THREE.MeshStandardMaterial({color:0xD6CBBF,roughness:.75}));
+
+/* 【修正】將底板改為沉穩的深可可棕色，與米白背景區隔並凸顯積木 */
+const base=new THREE.Mesh(new THREE.BoxGeometry(G,.4,G),new THREE.MeshStandardMaterial({color:0x4A3F35,roughness:.75}));
 base.position.y=-.2;base.userData={w:G,h:.4,d:G};base.userData.owner=base;S.add(base);
 const bs=new THREE.InstancedMesh(stG,base.material,G*G),mt=new THREE.Matrix4();
 for(let i=0;i<G;i++)for(let j=0;j<G;j++){mt.setPosition(i-G/2+.5,SH/2,j-G/2+.5);bs.setMatrixAt(i*G+j,mt)}S.add(bs);
