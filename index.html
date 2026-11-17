@@ -1,254 +1,45 @@
-<!DOCTYPE html>
-<html lang="zh-Hant"><head><meta charset="utf-8">
-<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<title>積木組裝台</title>
 <style>
-:root{--bg:#FAF7F2;--pn:#FFFFFF;--p2:#F5EFE6;--tx:#332E2A;--sb:#6E655F;--ln:#E8E0D5;--rd:#E07A38;color-scheme:light;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
-@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#1E1B18;--pn:#26221E;--p2:#332D28;--tx:#F5EFE6;--sb:#A69B93;--ln:#423A34;--rd:#E07A38;color-scheme:dark}}
-:root[data-theme="dark"]{--bg:#1E1B18;--pn:#26221E;--p2:#332D28;--tx:#F5EFE6;--sb:#A69B93;--ln:#423A34;--rd:#E07A38;color-scheme:dark}
+/* 2.0 大地暖陽心善版配色 */
+:root{
+  --bg:#FAF7F2;      /* 晨光米白 / 暖燕麥色主背景 */
+  --pn:#FFFFFF;      /* 純淨白面板與卡片 */
+  --p2:#F5EFE6;      /* 次要按鈕與淺色區塊 */
+  --tx:#332E2A;      /* 深焙咖啡棕主文字（取代生硬純黑） */
+  --sb:#6E655F;      /* 暖灰棕說明文字 */
+  --ln:#E8E0D5;      /* 柔和暖灰邊框 */
+  --rd:#E07A38;      /* 暖陽琥珀橘（核心按鈕與選取重點色） */
+  color-scheme:light;
+  box-sizing:border-box;
+  padding-top:env(safe-area-inset-top,0px);
+  padding-bottom:env(safe-area-inset-bottom,0px)
+}
+@media (prefers-color-scheme:dark){
+  :root:not([data-theme="light"]){
+    --bg:#1E1B18;--pn:#26221E;--p2:#332D28;--tx:#F5EFE6;--sb:#A69B93;--ln:#423A34;--rd:#E07A38;
+    color-scheme:dark
+  }
+}
+:root[data-theme="dark"]{
+  --bg:#1E1B18;--pn:#26221E;--p2:#332D28;--tx:#F5EFE6;--sb:#A69B93;--ln:#423A34;--rd:#E07A38;
+  color-scheme:dark
+}
 html{scroll-padding-top:env(safe-area-inset-top,0px)}
 html,body{height:100%;margin:0}
 body{position:relative;overflow:hidden;background:var(--bg);color:var(--tx);font:14px/1.4 "Noto Sans TC","PingFang TC","Microsoft JhengHei",system-ui,sans-serif}
-#c{position:absolute;inset:0;width:100%;height:100%;display:block;touch-action:none;z-index:0}
-.top{position:absolute;top:8px;left:8px;right:8px;display:flex;flex-direction:column;gap:6px;pointer-events:none;z-index:10}
+#c{position:absolute;inset:0;width:100%;height:100%;display:block;touch-action:none}
+.top{position:absolute;top:8px;left:8px;right:8px;display:flex;flex-direction:column;gap:6px;pointer-events:none}
 .row{display:flex;flex-wrap:wrap;gap:6px}.row[hidden]{display:none}
 .b{pointer-events:auto;border:1px solid var(--ln);border-radius:12px;padding:8px 12px;background:var(--pn);color:var(--tx);font:inherit;cursor:pointer;transition:all .2s ease}
 .b.on{background:var(--rd);border-color:var(--rd);color:#fff}.b:disabled{opacity:.4;cursor:default}
 .tip{font-size:12px;color:var(--sb)}
-.panel{position:absolute;left:50%;bottom:8px;transform:translateX(-50%);width:min(640px,calc(100% - 16px));box-sizing:border-box;display:flex;flex-wrap:wrap;gap:12px 28px;align-items:flex-end;background:var(--pn);border:1px solid var(--ln);border-radius:18px;padding:12px 16px;box-shadow:0 8px 24px rgba(51,46,42,.06);z-index:10}
+.panel{position:absolute;left:50%;bottom:8px;transform:translateX(-50%);width:min(640px,calc(100% - 16px));box-sizing:border-box;display:flex;flex-wrap:wrap;gap:12px 28px;align-items:flex-end;background:var(--pn);border:1px solid var(--ln);border-radius:18px;padding:12px 16px;box-shadow:0 8px 24px rgba(51,46,42,.06)}
 .lb{font-size:12px;color:var(--sb);margin-bottom:6px}
 .panel .b{background:var(--p2)}.panel .b.on{background:var(--rd);color:#fff}
 .sw{width:34px;height:34px;border-radius:50%;border:1px solid var(--ln);padding:0;cursor:pointer}
 .sw.on{box-shadow:0 0 0 2px var(--pn),0 0 0 4px var(--rd)}
-.md{position:absolute;inset:0;background:rgba(51,46,42,.4);display:flex;align-items:center;justify-content:center;padding:16px;z-index:100}.md[hidden]{display:none}
+.md{position:absolute;inset:0;background:rgba(51,46,42,.4);display:flex;align-items:center;justify-content:center;padding:16px}.md[hidden]{display:none}
 .mc{background:var(--pn);border:1px solid var(--ln);border-radius:18px;padding:16px;width:min(420px,100%);max-height:80%;overflow:auto;display:flex;flex-direction:column;gap:10px;box-shadow:0 12px 32px rgba(51,46,42,.12)}
 .mc input{font:inherit;padding:8px 10px;border-radius:10px;border:1px solid var(--ln);background:var(--p2);color:var(--tx)}
 .mi{display:flex;gap:6px;align-items:center}.mi span{flex:1}
-#mq{position:absolute;border:1.5px dashed var(--rd);background:rgba(224,122,56,.12);pointer-events:none;z-index:5}#mq[hidden]{display:none}
-</style></head><body>
-<canvas id="c"></canvas>
-<div class="top">
- <div class="row"><button class="b on" id="mP">放置</button><button class="b" id="mS">選取</button><button class="b" id="mD">拿掉</button><button class="b" id="un">↶ 還原</button><button class="b" id="re">↷ 重做</button></div>
- <div class="row" id="st">
-  <button class="b" id="mm">多選：關</button><button class="b" id="gr">組成群組</button><button class="b" id="ug">取消群組</button><button class="b" id="dl">刪除</button>
-  <button class="b" id="up">▲ 升高</button><button class="b" id="dn">▼ 降低</button><button class="b" id="rx">繞 X 轉</button><button class="b" id="ry">繞 Y 轉</button><button class="b" id="rz">繞 Z 轉</button><button class="b" id="mi">組內單選：關</button><button class="b" id="rg">移出群組</button><button class="b on" id="bx">框選：開</button>
- </div>
- <div class="tip" id="tip"></div>
-</div>
-<div class="panel">
- <div><div class="lb">經典色彩</div><div class="row" id="sw"></div></div>
- <div><div class="lb">造型磚塊</div><div class="row" id="shp"></div></div>
- <button class="b" id="rt">↻ 旋轉方向 (R)</button><button class="b on" id="fr">自由模式：開</button><button class="b" id="sv">儲存模型</button><button class="b" id="ld">我的模型</button>
-</div>
-<div id="mq" hidden></div><div class="md" id="md" hidden><div class="mc" id="mc"></div></div>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
-<script>
-const {Vector3:V3,Quaternion:Q}=THREE,$=i=>document.getElementById(i);
-const H=1.2,SR=.3,SH=.2,G=40;
-const COLORS=['#E07A38','#5C8374','#F4A261','#8D6E63','#D97706'];
-const SHAPES={sq:{n:'2x2 正方',w:2,d:2},long:{n:'2x4 長方',w:2,d:4},arc:{n:'2x2 弧形磚',w:2,d:2}};
-let color=COLORS[0],shape='long',mode='place',rot=0,multi=false,gc=0,lastE=null,tm,free=true;
-const cv=$('c'),R=new THREE.WebGLRenderer({canvas:cv,antialias:true});R.setPixelRatio(Math.min(devicePixelRatio,2));
-const S=new THREE.Scene(),cam=new THREE.PerspectiveCamera(45,1,.1,500),ray=new THREE.Raycaster();
-S.add(new THREE.HemisphereLight(0xfffcf5,0x665c52,.95));
-const dl=new THREE.DirectionalLight(0xfff6e8,.75);dl.position.set(8,16,10);S.add(dl);
-
-/* 【修復重點】確保 3D 場景背景直接採用暖燕麥米白，層級正確不被覆蓋 */
-function theme(){
-  const bgCol = getComputedStyle(document.body).backgroundColor;
-  S.background = new THREE.Color(bgCol || '#FAF7F2');
-}
-theme();
-matchMedia('(prefers-color-scheme: dark)').addEventListener('change',theme);
-
-// ---- geometry ----
-const stG=new THREE.CylinderGeometry(SR,SR,SH,18),boxG={};
-const arcG=(()=>{const h=H/2,s=new THREE.Shape();
- s.moveTo(-1,-h);s.lineTo(1,-h);s.lineTo(1,-h+.3);s.quadraticCurveTo(.45,h,0,h);s.lineTo(-1,h);s.lineTo(-1,-h);
- const g=new THREE.ExtrudeGeometry(s,{depth:2,bevelEnabled:false,curveSegments:12});g.rotateY(-Math.PI/2);g.translate(1,0,0);return g})();
-
-const base=new THREE.Mesh(new THREE.BoxGeometry(G,.4,G),new THREE.MeshStandardMaterial({color:0x4A3F35,roughness:.75}));
-base.position.y=-.2;base.userData={w:G,h:.4,d:G};base.userData.owner=base;S.add(base);
-const bs=new THREE.InstancedMesh(stG,base.material,G*G),mt=new THREE.Matrix4();
-for(let i=0;i<G;i++)for(let j=0;j<G;j++){mt.setPosition(i-G/2+.5,SH/2,j-G/2+.5);bs.setMatrixAt(i*G+j,mt)}S.add(bs);
-
-function makeBrick(key,col,ghost){
- const sh=SHAPES[key],g=new THREE.Group(),mat=new THREE.MeshStandardMaterial({color:col,roughness:.35});
- if(ghost){mat.transparent=true;mat.opacity=.6;mat.depthWrite=false}
- const geo=key==='arc'?arcG:(boxG[key]=boxG[key]||new THREE.BoxGeometry(sh.w,H,sh.d));
- const body=new THREE.Mesh(geo,mat);body.userData.owner=g;g.add(body);
- for(let i=0;i<sh.w;i++)for(let j=0;j<sh.d;j++){if(key==='arc'&&j>0)continue;
-  const s=new THREE.Mesh(stG,mat);s.position.set(i+.5-sh.w/2,H/2+SH/2,j+.5-sh.d/2);g.add(s)}
- g.userData={key,w:sh.w,d:sh.d,h:H,gid:null,mat,body};return g}
-
-// ---- state ----
-const bricks=[],sel=new Set();let pick=[base],ghost=null,drag=null;
-function addBrick(key,col,pos,quat){const b=makeBrick(key,col,false);b.position.copy(pos);b.quaternion.copy(quat);S.add(b);bricks.push(b);pick.push(b.userData.body);return b}
-function mkGhost(){if(ghost)S.remove(ghost);ghost=makeBrick(shape,color,true);ghost.visible=false;S.add(ghost)}
-
-// ---- collision: sample points inside other bricks ----
-function hits(pos,quat,w,d,skip){
- const pts=[];for(let i=0;i<w;i++)for(let j=0;j<d;j++)for(const y of[-.3,.3])pts.push(new V3(i+.5-w/2,y,j+.5-d/2).applyQuaternion(quat).add(pos));
- for(const b of[base,...bricks]){if(skip&&skip.has(b))continue;b.updateMatrixWorld(true);const u=b.userData;
-  for(const p of pts){const l=b.worldToLocal(p.clone());if(Math.abs(l.x)<u.w/2-.08&&Math.abs(l.y)<u.h/2-.08&&Math.abs(l.z)<u.d/2-.08)return true}}
- return false}
-const ok=s=>free||[...s].every(b=>!hits(b.position,b.quaternion,b.userData.w,b.userData.d,s));
-
-// ---- attach to any face: new brick's up = face normal ----
-function target(hit){
- const o=hit.object.userData.owner,ud=o.userData,n=hit.face.normal;
- const ax=Math.abs(n.x)>Math.abs(n.y)&&Math.abs(n.x)>Math.abs(n.z)?0:Math.abs(n.y)>Math.abs(n.z)?1:2,s=Math.sign(n.getComponent(ax));
- const Y=new V3();Y.setComponent(ax,s);const X=new V3();X.setComponent((ax+1)%3,1);const Z=new V3().crossVectors(X,Y);
- const qr=new Q().setFromAxisAngle(Y,rot*Math.PI/12);X.applyQuaternion(qr);Z.applyQuaternion(qr);
- if(!free)[X,Z].forEach(v=>v.set(Math.round(v.x),Math.round(v.y),Math.round(v.z)));
- const sh=SHAPES[shape],ext=[0,1,2].map(i=>Math.abs(X.getComponent(i))*sh.w+Math.abs(Y.getComponent(i))*H+Math.abs(Z.getComponent(i))*sh.d);
- const oe=[ud.w,ud.h,ud.d];o.updateMatrixWorld(true);const lp=o.worldToLocal(hit.point.clone()),c=new V3();
- for(let i=0;i<3;i++){
-  if(i===ax)c.setComponent(i,s*(oe[i]/2+H/2));
-  else if(free)c.setComponent(i,Math.round(lp.getComponent(i)/.05)*.05);
-  else if(i===1)c.setComponent(i,Math.round(lp.y/.6)*.6);
-  else{const off=(((ext[i]-oe[i])/2)%1+1)%1;c.setComponent(i,Math.round(lp.getComponent(i)-off)+off)}}
- const ql=new Q().setFromRotationMatrix(new THREE.Matrix4().makeBasis(X,Y,Z));
- return{pos:o.localToWorld(c),quat:o.getWorldQuaternion(new Q().multiply(ql))}}
-function setRay(e){const r=cv.getBoundingClientRect();ray.setFromCamera({x:(e.clientX-r.left)/r.width*2-1,y:-((e.clientY-r.top)/r.height)*2+1},cam)}
-function updGhost(e){lastE=e;if(mode!=='place'){ghost.visible=false;return false}
- setRay(e);const h=ray.intersectObjects(pick,false)[0];if(!h){ghost.visible=false;return false}
- const t=target(h),sh=SHAPES[shape];ghost.position.copy(t.pos);ghost.quaternion.copy(t.quat);ghost.visible=true;
- const good=free||!hits(t.pos,t.quat,sh.w,sh.d,null);ghost.userData.mat.color.set(good?color:'#d9534f');return good}
-
-// ---- selection & groups ----
-const box=new THREE.Box3Helper(new THREE.Box3(),0x6E655F);box.visible=false;S.add(box);
-const expand=b=>b.userData.gid==null?[b]:bricks.filter(x=>x.userData.gid===b.userData.gid);
-function say(m){$('tip').textContent=m;clearTimeout(tm);tm=setTimeout(refresh,1800)}
-function refresh(){
- bricks.forEach(b=>b.userData.mat.emissive.set(sel.has(b)?0x443a32:0));
- const a=[...sel],grouped=a.length>0&&a[0].userData.gid!=null&&a.every(b=>b.userData.gid===a[0].userData.gid);
- if(a.length){const bb=new THREE.Box3();a.forEach(b=>{b.updateMatrixWorld(true);bb.expandByObject(b)});box.box.copy(bb);box.material.color.set(grouped?0xE07A38:0x6E655F);box.visible=true}else box.visible=false;
- $('gr').disabled=!(a.length>1&&!grouped);$('ug').disabled=!a.some(b=>b.userData.gid!=null);
- ['dl','up','dn','rx','ry','rz','rg'].forEach(i=>$(i).disabled=!a.length);$('un').disabled=!undoS.length;$('re').disabled=!redoS.length;
- $('tip').textContent=mode==='remove'?'點擊積木就拿掉（只拿掉被點的那一塊），可還原':mode==='place'?'點擊任一面放置・要群組請先切到「選取」・拖曳轉視角・滾輪縮放・R 轉方向':a.length?`已選取 ${a.length} 塊${grouped?'（群組）':''}・拖曳可移動`:'點擊積木選取，拖曳空白處框選（由左往右＝完全框住，由右往左＝碰到就選），Alt+拖曳轉視角'}
-function doGroup(){if(sel.size<2)return;const g=++gc;sel.forEach(b=>b.userData.gid=g);commit()}
-function unGroup(){sel.forEach(b=>b.userData.gid=null);tidy();commit()}
-function del(){sel.forEach(b=>{S.remove(b);bricks.splice(bricks.indexOf(b),1);b.userData.mat.dispose()});sel.clear();pick=[base,...bricks.map(b=>b.userData.body)];tidy();commit()}
-function xf(fn){if(!sel.size)return;const o=[...sel].map(b=>[b,b.position.clone(),b.quaternion.clone()]);fn();
- if(!ok(sel)){o.forEach(([b,p,q])=>{b.position.copy(p);b.quaternion.copy(q)});say('位置被擋住，已還原');refresh()}else commit()}
-function rotSel(axis){xf(()=>{const bb=new THREE.Box3();sel.forEach(b=>{b.updateMatrixWorld(true);bb.expandByObject(b)});
- const c=bb.getCenter(new V3()),q=new Q().setFromAxisAngle(axis,Math.PI/2);
- sel.forEach(b=>{b.position.sub(c).applyQuaternion(q).add(c);b.position.multiplyScalar(100).round().multiplyScalar(.01);b.quaternion.premultiply(q)})})}
-const nudge=y=>xf(()=>sel.forEach(b=>b.position.y+=y));
-function clickSel(e){setRay(e);const h=ray.intersectObjects(pick.slice(1),false)[0],add=multi||e.shiftKey||e.ctrlKey||e.metaKey;
- if(!h){if(!add)sel.clear()}else{const ob=h.object.userData.owner,m=(single||e.altKey)?[ob]:expand(ob);
-  if(add){const all=m.every(x=>sel.has(x));m.forEach(x=>all?sel.delete(x):sel.add(x))}else{sel.clear();m.forEach(x=>sel.add(x))}}
- refresh()}
-
-// ---- camera & pointers ----
-let theta=.8,phi=1.05,radius=36;const tgt=new V3(0,2,0);
-function cams(){cam.position.set(tgt.x+radius*Math.sin(phi)*Math.sin(theta),tgt.y+radius*Math.cos(phi),tgt.z+radius*Math.sin(phi)*Math.cos(theta));cam.lookAt(tgt)}
-const ptr=new Map();let moved=0,pinch=0,many=false,mq=null,boxOn=true;
-const pd=()=>{const v=[...ptr.values()];return Math.hypot(v[0].x-v[1].x,v[0].y-v[1].y)||1};
-cv.addEventListener('contextmenu',e=>e.preventDefault());
-cv.addEventListener('wheel',e=>{e.preventDefault();radius=Math.min(120,Math.max(6,radius*(1+Math.sign(e.deltaY)*.1)))},{passive:false});
-cv.addEventListener('pointerdown',e=>{cv.setPointerCapture(e.pointerId);ptr.set(e.pointerId,{x:e.clientX,y:e.clientY});
- if(ptr.size===1){moved=0;drag=null;many=false;mq=null;
-  if(mode==='select'&&e.button===0){setRay(e);const h=ray.intersectObjects(pick.slice(1),false)[0];
-   if(h&&sel.has(h.object.userData.owner))drag={pl:new THREE.Plane(new V3(0,1,0),-h.point.y),st:h.point.clone(),orig:[...sel].map(b=>[b,b.position.clone()]),d:new V3()};if(!drag&&boxOn&&!e.altKey)mq={x0:e.clientX,y0:e.clientY,x1:e.clientX,y1:e.clientY}}}
- else{many=true;drag=null;pinch=pd()}});
-cv.addEventListener('pointermove',e=>{const p=ptr.get(e.pointerId);
- if(!p){if(mode==='place'&&e.pointerType==='mouse')updGhost(e);return}
- const dx=e.clientX-p.x,dy=e.clientY-p.y;p.x=e.clientX;p.y=e.clientY;
- if(ptr.size===2){const d=pd();radius=Math.min(120,Math.max(6,radius*pinch/d));pinch=d;return}
- moved+=Math.abs(dx)+Math.abs(dy);if(moved>8&&ghost)ghost.visible=false;
- if(drag){if(moved<8)return;setRay(e);const q=new V3();if(!ray.ray.intersectPlane(drag.pl,q))return;
-  const stp=free?.05:1;drag.d.set(Math.round((q.x-drag.st.x)/stp)*stp,0,Math.round((q.z-drag.st.z)/stp)*stp);drag.orig.forEach(([b,o])=>b.position.copy(o).add(drag.d));refresh();return}
- if(mq){if(moved>=8){mq.x1=e.clientX;mq.y1=e.clientY;drawMq()}return}
- if(e.buttons&2){const k=radius*.0018,r=new V3().setFromMatrixColumn(cam.matrix,0),u=new V3().setFromMatrixColumn(cam.matrix,1);tgt.addScaledVector(r,-dx*k).addScaledVector(u,dy*k);return}
- theta-=dx*.008;phi=Math.min(Math.PI-.08,Math.max(.08,phi-dy*.008))});
-function up(e){if(!ptr.has(e.pointerId))return;ptr.delete(e.pointerId);if(ptr.size)return;if(mq){if(moved>=8&&!many)finishMq(e);mq=null;$('mq').hidden=true}
- if(drag){if(moved>=8){if(!ok(sel)){drag.orig.forEach(([b,o])=>b.position.copy(o));say('位置被擋住，已還原');refresh()}else commit()}drag=null}
- if(moved<8&&!many&&e.button===0){
-  if(mode==='place'){if(updGhost(e)){const sh=SHAPES[shape];addBrick(shape,color,ghost.position,ghost.quaternion);commit();updGhost(e)}}
-  else if(mode==='remove')removeAt(e);else clickSel(e)}
- if(e.pointerType!=='mouse'&&ghost)ghost.visible=false}
-cv.addEventListener('pointerup',up);cv.addEventListener('pointercancel',up);
-
-// ---- UI ----
-COLORS.forEach(c=>{const b=document.createElement('button');b.className='sw'+(c===color?' on':'');b.style.background=c;b.setAttribute('aria-label',c);
- b.onclick=()=>{color=c;document.querySelectorAll('.sw').forEach(x=>x.classList.toggle('on',x===b));
-  if(mode==='select'&&sel.size){sel.forEach(x=>x.userData.mat.color.set(c));commit()}mkGhost()};$('sw').appendChild(b)});
-Object.entries(SHAPES).forEach(([k,v])=>{const b=document.createElement('button');b.className='b'+(k===shape?' on':'');b.textContent=v.n;
- b.onclick=()=>{shape=k;document.querySelectorAll('#shp .b').forEach(x=>x.classList.toggle('on',x===b));mkGhost()};$('shp').appendChild(b)});
-function setMode(m){mode=m;$('mP').classList.toggle('on',m==='place');$('mS').classList.toggle('on',m==='select');$('mD').classList.toggle('on',m==='remove');if(ghost)ghost.visible=false;refresh()}
-$('mP').onclick=()=>setMode('place');$('mS').onclick=()=>setMode('select');$('mD').onclick=()=>setMode('remove');
-$('mm').onclick=()=>{multi=!multi;$('mm').textContent='多選：'+(multi?'開':'關');$('mm').classList.toggle('on',multi)};
-$('gr').onclick=doGroup;$('ug').onclick=unGroup;$('dl').onclick=del;
-$('up').onclick=()=>nudge(H);$('dn').onclick=()=>nudge(-H);
-$('rx').onclick=()=>rotSel(new V3(1,0,0));$('ry').onclick=()=>rotSel(new V3(0,1,0));$('rz').onclick=()=>rotSel(new V3(0,0,1));
-$('rt').onclick=()=>{rot=(rot+(free?1:6))%24;if(lastE)updGhost(lastE)};
-addEventListener('keydown',e=>{if(e.target.tagName==='INPUT')return;const k=e.key.toLowerCase();
- if((e.ctrlKey||e.metaKey)&&k==='z'){e.preventDefault();e.shiftKey?redo():undo()}
- else if((e.ctrlKey||e.metaKey)&&k==='y'){e.preventDefault();redo()}
- else if(k==='r'&&!e.ctrlKey&&!e.metaKey){$('rt').click()}
- else if((e.ctrlKey||e.metaKey)&&k==='g'){e.preventDefault();e.shiftKey?unGroup():doGroup()}
- else if(k==='delete'||k==='backspace'){del()}
- else if(k==='escape'){sel.clear();refresh()});
-
-// ---- undo / redo (snapshots) ----
-const undoS=[],redoS=[];let cur=null;
-const snap=()=>JSON.stringify(bricks.map(b=>({k:b.userData.key,c:'#'+b.userData.mat.color.getHexString(),p:b.position.toArray(),q:b.quaternion.toArray(),g:b.userData.gid})));
-function commit(){const n=snap();if(n===cur){refresh();return}undoS.push(cur);if(undoS.length>100)undoS.shift();redoS.length=0;cur=n;refresh()}
-function restore(s){bricks.forEach(b=>{S.remove(b);b.userData.mat.dispose()});bricks.length=0;pick=[base];sel.clear();
- JSON.parse(s).forEach(o=>{const b=addBrick(o.k,o.c,new V3().fromArray(o.p),new Q().fromArray(o.q));b.userData.gid=o.g});cur=s;refresh()}
-function undo(){if(!undoS.length)return;redoS.push(cur);restore(undoS.pop())}
-function redo(){if(!redoS.length)return;undoS.push(cur);restore(redoS.pop())}
-$('un').onclick=undo;$('re').onclick=redo;
-let single=false;
-$('bx').onclick=()=>{boxOn=!boxOn;$('bx').textContent='框選：'+(boxOn?'開':'關');$('bx').classList.toggle('on',boxOn)};
-function drawMq(){const r=document.body.getBoundingClientRect(),m=$('mq');m.hidden=false;m.style.left=Math.min(mq.x0,mq.x1)-r.left+'px';m.style.top=Math.min(mq.y0,mq.y1)-r.top+'px';m.style.width=Math.abs(mq.x1-mq.x0)+'px';m.style.height=Math.abs(mq.y1-mq.y0)+'px'}
-function scr(b){const u=b.userData,r=cv.getBoundingClientRect();b.updateMatrixWorld(true);let x0=1e9,y0=1e9,x1=-1e9,y1=-1e9;
- for(const sx of[-1,1])for(const sy of[-1,1])for(const sz of[-1,1]){const v=new V3(sx*u.w/2,sy*u.h/2,sz*u.d/2);b.localToWorld(v);v.project(cam);
-  const x=(v.x+1)/2*r.width+r.left,y=(1-v.y)/2*r.height+r.top;x0=Math.min(x0,x);x1=Math.max(x1,x);y0=Math.min(y0,y);y1=Math.max(y1,y)}
- return{x0,y0,x1,y1}}
-function finishMq(e){const a=Math.min(mq.x0,mq.x1),b=Math.max(mq.x0,mq.x1),c=Math.min(mq.y0,mq.y1),d=Math.max(mq.y0,mq.y1),win=mq.x1>=mq.x0,add=multi||e.shiftKey||e.ctrlKey||e.metaKey,hit=new Set();
- bricks.forEach(k=>{const s=scr(k),inn=win?(s.x0>=a&&s.x1<=b&&s.y0>=c&&s.y1<=d):(s.x1>=a&&s.x0<=b&&s.y1>=c&&s.y0<=d);if(inn)expand(k).forEach(x=>hit.add(x))});
- if(!add)sel.clear();hit.forEach(x=>sel.add(x));refresh()}
-$('fr').onclick=()=>{free=!free;$('fr').textContent='自由模式：'+(free?'開':'關');$('fr').classList.toggle('on',free);if(!free)rot=Math.round(rot/6)*6%24;if(lastE)updGhost(lastE)};
-function tidy(){const c={};bricks.forEach(b=>{const g=b.userData.gid;if(g!=null)c[g]=(c[g]||0)+1});bricks.forEach(b=>{if(b.userData.gid!=null&&c[b.userData.gid]<2)b.userData.gid=null})}
-function removeAt(e){setRay(e);const h=ray.intersectObjects(pick.slice(1),false)[0];if(!h)return;const b=h.object.userData.owner;S.remove(b);b.userData.mat.dispose();bricks.splice(bricks.indexOf(b),1);sel.delete(b);pick=[base,...bricks.map(x=>x.userData.body)];tidy();commit()}
-$('mi').onclick=()=>{single=!single;$('mi').textContent='組內單選：'+(single?'開':'關');$('mi').classList.toggle('on',single)};
-$('rg').onclick=()=>{if(!sel.size)return;sel.forEach(b=>b.userData.gid=null);tidy();commit()};
-// ---- save / load models (db private per person, localStorage fallback) ----
-let dbc=null;
-(async()=>{try{if(window.claude&&claude.use){const d=await claude.use('db'),u=await claude.use('user'),i=u&&await u.id();if(d&&i)dbc=d.collection('data/users/'+i)}}catch(e){}})();
-const LS='brick-models';
-const lsGet=()=>{try{return JSON.parse(localStorage.getItem(LS)||'[]')}catch(e){return[]}};
-const lsSet=a=>{try{localStorage.setItem(LS,JSON.stringify(a));return true}catch(e){return false}};
-async function listModels(){let a=lsGet();if(dbc){try{const s=await dbc.get();a=a.concat(s.docs.map(d=>({id:d.id,...d.data()})))}catch(e){}}return a.filter(m=>m&&m.s).sort((x,y)=>y.t-x.t)}
-async function saveModel(name){const old=(await listModels()).find(m=>m.name===name),id=old?old.id:'m'+Date.now().toString(36),rec={name,t:Date.now(),s:snap(),n:bricks.length};
- if(dbc){try{await dbc.doc(id).set(rec);lsSet(lsGet().filter(m=>m.id!==id));return true}catch(e){}}
- const a=lsGet().filter(m=>m.id!==id);a.push({id,...rec});return lsSet(a)}
-async function delModel(id){if(dbc){try{await dbc.doc(id).delete()}catch(e){}}lsSet(lsGet().filter(m=>m.id!==id))}
-function loadModel(m){undoS.push(cur);if(undoS.length>100)undoS.shift();redoS.length=0;restore(m.s);gc=Math.max(gc,...bricks.map(b=>b.userData.gid||0));say('已載入「'+m.name+'」')}
-const md=$('md'),mc=$('mc');
-const el=(t,p={},...k)=>{const e=document.createElement(t);Object.assign(e,p);k.forEach(x=>e.append(x));return e};
-const closeM=()=>{md.hidden=true;mc.textContent=''};
-md.addEventListener('pointerdown',e=>{if(e.target===md)closeM()});
-$('sv').onclick=()=>{mc.textContent='';const inp=el('input',{placeholder:'模型名稱，例如：機器人變噴射機',maxLength:40});
- const go=async()=>{const n=inp.value.trim();if(!n){inp.focus();return}const r=await saveModel(n);closeM();say(r?'已儲存「'+n+'」':'儲存失敗，瀏覽器不允許儲存')};
- inp.onkeydown=e=>{if(e.key==='Enter')go()};
- mc.append(el('div',{textContent:'儲存目前的積木'}),inp,el('div',{className:'row'},el('button',{className:'b on',textContent:'儲存',onclick:go}),el('button',{className:'b',textContent:'取消',onclick:closeM})));
- md.hidden=false;inp.focus()};
-$('ld').onclick=async()=>{mc.textContent='';mc.append(el('div',{textContent:'我的模型'}));md.hidden=false;
- const a=await listModels();mc.textContent='';mc.append(el('div',{textContent:'我的模型'}));
- if(!a.length)mc.append(el('div',{className:'tip',textContent:'還沒有儲存的模型'}));
- a.forEach(m=>mc.append(el('div',{className:'mi'},el('span',{textContent:m.name+'（'+m.n+' 塊）'}),
-  el('button',{className:'b',textContent:'載入',onclick:()=>{loadModel(m);closeM()}}),
-  el('button',{className:'b',textContent:'刪除',onclick:async()=>{await delModel(m.id);$('ld').click()}}))));
- mc.append(el('div',{className:'row'},el('button',{className:'b',textContent:'關閉',onclick:closeM})))};
-// ---- start ----
-const I=new Q();
-addBrick('long',COLORS[0],new V3(0,.6,0),I);addBrick('sq',COLORS[1],new V3(0,1.8,1),I);addBrick('arc',COLORS[2],new V3(0,1.8,-1),I);
-cur=snap();mkGhost();refresh();
-function rs(){const w=cv.clientWidth,h=cv.clientHeight;if(!w||!h)return;R.setSize(w,h,false);cam.aspect=w/h;cam.updateProjectionMatrix()}
-addEventListener('resize',rs);
-(function loop(){rs();cams();R.render(S,cam);requestAnimationFrame(loop)})();
-</script></body></html>
+#mq{position:absolute;border:1.5px dashed var(--rd);background:rgba(224,122,56,.12);pointer-events:none}#mq[hidden]{display:none}
+</style>
